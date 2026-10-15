@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>X/O vs AI - Bất bại</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=shopping_cart" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         * {
             margin: 0;
@@ -404,7 +405,7 @@
             box-shadow: 0 0 15px rgba(79, 110, 247, 0.3);
         }
 
-        /* ===== NÚT TRÒN SHOP Ở DƯỚI GIỮA ===== */
+        /* ===== NÚT TRÒN SHOP (PHẢI) ===== */
         .shop-float-btn {
             position: fixed;
             bottom: 24px;
@@ -440,7 +441,6 @@
             font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 40;
         }
 
-        /* Badge nhỏ trên nút shop */
         .shop-float-btn::after {
             content: '';
             position: absolute;
@@ -452,6 +452,79 @@
             border-radius: 50%;
             border: 2px solid #1a1e2b;
             box-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+        }
+
+        /* ===== NÚT TRÒN HỘP THƯ (TRÁI) ===== */
+        .mailbox-float-btn {
+            position: fixed;
+            top: 50%;
+            left: 24px;
+            transform: translateY(-50%);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #f7a34f, #d07820);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #8a4f0f, 0 12px 25px rgba(0, 0, 0, 0.6);
+            transition: all 0.15s ease;
+            z-index: 100;
+            color: white;
+        }
+
+        .mailbox-float-btn:hover {
+            transform: translateY(-50%) scale(1.08);
+            background: linear-gradient(145deg, #ffb35c, #e08a2a);
+        }
+
+        .mailbox-float-btn:active {
+            transform: translateY(-50%) translateY(4px);
+            box-shadow: 0 4px 0 #8a4f0f, 0 8px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .mailbox-float-btn i {
+            font-size: 28px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+        }
+
+        .mailbox-float-btn::after {
+            content: '';
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 12px;
+            height: 12px;
+            background: #ff4d6d;
+            border-radius: 50%;
+            border: 2px solid #1a1e2b;
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+        }
+
+        /* Tooltip cho nút hộp thư */
+        .mailbox-float-btn .mailbox-label {
+            position: absolute;
+            left: 76px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffd9a3;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            border: 1px solid rgba(255, 200, 100, 0.3);
+        }
+
+        .mailbox-float-btn:hover .mailbox-label {
+            opacity: 1;
         }
 
         /* ===== KHUNG CỬA HÀNG ===== */
@@ -593,18 +666,522 @@
             border: 1px solid rgba(255, 217, 102, 0.2);
         }
 
-        .shop-empty {
-            grid-column: 1 / -1;
-            text-align: center;
+        /* ===== KHUNG HỘP THƯ ===== */
+        .mailbox-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 250;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 80px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .mailbox-modal-overlay.active {
+            display: flex;
+        }
+
+        .mailbox-modal {
+            background: linear-gradient(145deg, #2d2638, #1f1a2b);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 200, 100, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(247, 163, 79, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 24px 28px;
+            animation: slideDown 0.3s ease;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mailbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .mailbox-header h2 {
+            color: #ffd9a3;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mailbox-header h2 i {
+            font-size: 26px;
+            color: #f7a34f;
+        }
+
+        .mailbox-close-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+            line-height: 1;
+            font-weight: 400;
+        }
+
+        .mailbox-close-btn:hover {
+            background: rgba(255, 70, 70, 0.2);
+            border-color: rgba(255, 70, 70, 0.4);
+            color: #ffb3b3;
+            transform: rotate(90deg);
+        }
+
+        .mailbox-close-btn:active {
+            transform: rotate(90deg) scale(0.9);
+        }
+
+        /* Tabs */
+        .mailbox-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 6px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mailbox-tab {
+            flex: 1;
+            padding: 12px 18px;
+            border-radius: 34px;
+            background: transparent;
+            border: none;
             color: #8b9bb5;
-            padding: 40px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .mailbox-tab i {
+            font-size: 1.1rem;
+        }
+
+        .mailbox-tab:hover {
+            color: #cbd5e1;
+        }
+
+        .mailbox-tab.active {
+            background: linear-gradient(145deg, #f7a34f, #d07820);
+            color: white;
+            box-shadow: 0 6px 15px rgba(247, 163, 79, 0.4);
+        }
+
+        .mailbox-tab.active[data-tab="gift"] {
+            background: linear-gradient(145deg, #f76f6f, #d04040);
+            box-shadow: 0 6px 15px rgba(247, 111, 111, 0.4);
+        }
+
+        /* Nội dung tab */
+        .mailbox-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            min-height: 200px;
+        }
+
+        .mailbox-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .mailbox-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .mailbox-content::-webkit-scrollbar-thumb {
+            background: rgba(247, 163, 79, 0.4);
+            border-radius: 10px;
+        }
+
+        .mailbox-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(247, 163, 79, 0.7);
+        }
+
+        .mailbox-tab-pane {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .mailbox-tab-pane.active {
+            display: flex;
+        }
+
+        /* Item thông báo */
+        .mailbox-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            transition: all 0.15s ease;
+        }
+
+        .mailbox-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateX(4px);
+        }
+
+        .mailbox-item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .mailbox-item-icon.notification {
+            background: rgba(79, 110, 247, 0.2);
+            color: #7b9bff;
+            border: 1px solid rgba(79, 110, 247, 0.3);
+        }
+
+        .mailbox-item-icon.gift {
+            background: rgba(247, 111, 111, 0.2);
+            color: #ff8a8a;
+            border: 1px solid rgba(247, 111, 111, 0.3);
+        }
+
+        .mailbox-item-body {
+            flex: 1;
+            text-align: left;
+        }
+
+        .mailbox-item-title {
+            color: #d0dbff;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .mailbox-item-desc {
+            color: #8b9bb5;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .mailbox-item-time {
+            color: #666f82;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .mailbox-item-badge {
+            display: inline-block;
+            background: linear-gradient(145deg, #f76f6f, #d04040);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Quà tặng X */
+        .gift-x-card {
+            background: linear-gradient(135deg, rgba(247, 111, 111, 0.15), rgba(208, 64, 64, 0.08));
+            border: 1px solid rgba(247, 111, 111, 0.3);
+            border-radius: 20px;
+            padding: 18px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+
+        .gift-x-card:hover {
+            background: linear-gradient(135deg, rgba(247, 111, 111, 0.25), rgba(208, 64, 64, 0.15));
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(247, 111, 111, 0.2);
+        }
+
+        .gift-x-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #f76f6f, #d04040);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(247, 111, 111, 0.4);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .gift-x-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .gift-x-name {
+            color: #ffb3b3;
             font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .gift-x-desc {
+            color: #8b9bb5;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .gift-x-claim {
+            background: linear-gradient(145deg, #f7a34f, #d07820);
+            border: none;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.15s ease;
+            box-shadow: 0 4px 0 #8a4f0f;
+            flex-shrink: 0;
+        }
+
+        .gift-x-claim:hover {
+            background: linear-gradient(145deg, #ffb35c, #e08a2a);
+        }
+
+        .gift-x-claim:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #8a4f0f;
+        }
+
+        .gift-x-claim.claimed {
+            background: rgba(255, 255, 255, 0.08);
+            color: #666f82;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .mailbox-empty {
+            text-align: center;
+            color: #666f82;
+            padding: 40px 20px;
+            font-size: 0.95rem;
             line-height: 1.6;
+        }
+
+        /* ===== KHUNG KẾT QUẢ (THUA / HÒA) ===== */
+        .result-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 300;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .result-overlay.active {
+            display: flex;
+        }
+
+        .result-modal {
+            background: linear-gradient(145deg, #232838, #1a1e2b);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 32px 32px;
+            text-align: center;
+            animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .result-modal.lose {
+            border-color: rgba(255, 100, 100, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 80, 80, 0.2);
+        }
+
+        .result-modal.draw {
+            border-color: rgba(255, 217, 102, 0.3);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 217, 102, 0.2);
+        }
+
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 12px;
+            line-height: 1;
+            animation: bounce 1s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-8px); }
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .result-modal.lose .result-title {
+            color: #ff8a8a;
+            text-shadow: 0 0 20px rgba(255, 100, 100, 0.6);
+        }
+
+        .result-modal.draw .result-title {
+            color: #ffd966;
+            text-shadow: 0 0 20px rgba(255, 217, 102, 0.6);
+        }
+
+        .result-subtitle {
+            color: #8b9bb5;
+            font-size: 1rem;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .countdown-display {
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: #b7cbff;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            margin: 10px 0 20px;
+            min-height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px;
+            text-shadow: 0 0 20px rgba(183, 203, 255, 0.5);
+            transition: all 0.2s;
+        }
+
+        .countdown-display.tick {
+            color: #ffb3b3;
+            text-shadow: 0 0 25px rgba(255, 100, 100, 0.8);
+            transform: scale(1.05);
+        }
+
+        .countdown-label {
+            color: #8b9bb5;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .btn-replay {
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: none;
+            color: white;
+            margin-top: 6px;
+        }
+
+        .btn-replay.enabled {
+            background: linear-gradient(145deg, #0fca7a, #0aa562);
+            box-shadow: 0 8px 0 #075a36, 0 8px 20px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+        }
+
+        .btn-replay.enabled:hover {
+            background: linear-gradient(145deg, #1ae08a, #0db86e);
+            transform: translateY(-2px);
+        }
+
+        .btn-replay.enabled:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #075a36, 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-replay.disabled {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            box-shadow: 0 8px 0 #000, 0 8px 20px rgba(0, 0, 0, 0.8);
+            cursor: not-allowed;
+            color: #555;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.98); }
             to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 700px) {
+            .mailbox-float-btn {
+                left: 12px;
+                width: 56px;
+                height: 56px;
+            }
+            .mailbox-float-btn i { font-size: 24px; }
+            .mailbox-float-btn .mailbox-label { display: none; }
         }
 
         @media (max-width: 600px) {
@@ -619,8 +1196,14 @@
             .btn-action { padding: 12px 24px; font-size: 0.95rem; }
             .shop-float-btn { width: 56px; height: 56px; bottom: 18px; }
             .shop-float-btn .material-symbols-outlined { font-size: 26px; }
-            .shop-modal { padding: 20px; }
-            .shop-header h2 { font-size: 1.3rem; }
+            .shop-modal, .mailbox-modal { padding: 20px; }
+            .shop-header h2, .mailbox-header h2 { font-size: 1.3rem; }
+            .result-modal { padding: 30px 22px 24px; }
+            .result-emoji { font-size: 3rem; }
+            .result-title { font-size: 1.5rem; }
+            .countdown-display { font-size: 2.4rem; }
+            .btn-replay { font-size: 1.1rem; padding: 15px; }
+            .mailbox-tab { font-size: 0.85rem; padding: 10px 12px; letter-spacing: 0.5px; }
         }
     </style>
 </head>
@@ -670,9 +1253,103 @@
         </div>
     </div>
 
-    <!-- NÚT TRÒN SHOP Ở DƯỚI GIỮA MÀN HÌNH -->
+    <!-- NÚT TRÒN HỘP THƯ (TRÁI) -->
+    <div id="mailboxFloatBtn" class="mailbox-float-btn" title="Hộp thư">
+        <i class="fa-duotone fa-light fa-envelope"></i>
+        <span class="mailbox-label">HỘP THƯ</span>
+    </div>
+
+    <!-- NÚT TRÒN SHOP (GIỮA DƯỚI) -->
     <div id="shopFloatBtn" class="shop-float-btn" title="Cửa hàng X">
         <span class="material-symbols-outlined">shopping_cart</span>
+    </div>
+
+    <!-- KHUNG HỘP THƯ -->
+    <div id="mailboxModalOverlay" class="mailbox-modal-overlay">
+        <div class="mailbox-modal">
+            <div class="mailbox-header">
+                <h2>
+                    <i class="fa-duotone fa-light fa-envelope"></i>
+                    HỘP THƯ
+                </h2>
+                <button id="mailboxCloseBtn" class="mailbox-close-btn" title="Thoát">✕</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mailbox-tabs">
+                <button class="mailbox-tab active" data-tab="notification">
+                    <i class="fa-solid fa-bell"></i> THÔNG BÁO
+                </button>
+                <button class="mailbox-tab" data-tab="gift">
+                    <i class="fa-solid fa-gift"></i> QUÀ TẶNG X
+                </button>
+            </div>
+
+            <!-- Nội dung -->
+            <div class="mailbox-content">
+                <!-- Tab Thông báo -->
+                <div class="mailbox-tab-pane active" data-pane="notification">
+                    <div class="mailbox-item">
+                        <div class="mailbox-item-icon notification">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                        <div class="mailbox-item-body">
+                            <div class="mailbox-item-title">Chào mừng đến với X/O!</div>
+                            <div class="mailbox-item-desc">Cảm ơn bạn đã tham gia. AI ở đây rất mạnh, hãy cố gắng hòa nhé!</div>
+                            <div class="mailbox-item-time">Vừa xong</div>
+                        </div>
+                    </div>
+                    <div class="mailbox-item">
+                        <div class="mailbox-item-icon notification">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <div class="mailbox-item-body">
+                            <div class="mailbox-item-title">Cập nhật phiên bản 2.0</div>
+                            <div class="mailbox-item-desc">Đã thêm Cửa hàng X và Hộp thư. Khám phá ngay!</div>
+                            <div class="mailbox-item-time">2 giờ trước</div>
+                        </div>
+                    </div>
+                    <div class="mailbox-item">
+                        <div class="mailbox-item-icon notification">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="mailbox-item-body">
+                            <div class="mailbox-item-title">Bảo mật tài khoản</div>
+                            <div class="mailbox-item-desc">ID của bạn được lưu an toàn trên trình duyệt. Không chia sẻ cho người khác.</div>
+                            <div class="mailbox-item-time">1 ngày trước</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Quà tặng X -->
+                <div class="mailbox-tab-pane" data-pane="gift">
+                    <div class="gift-x-card">
+                        <div class="gift-x-icon">X</div>
+                        <div class="gift-x-info">
+                            <div class="gift-x-name">Quà tặng X - Tân thủ</div>
+                            <div class="gift-x-desc">Nhận ngay 100 xu khởi đầu cho tân thủ!</div>
+                        </div>
+                        <button class="gift-x-claim" data-gift="starter">NHẬN</button>
+                    </div>
+                    <div class="gift-x-card">
+                        <div class="gift-x-icon">X</div>
+                        <div class="gift-x-info">
+                            <div class="gift-x-name">Quà tặng X - Điểm danh</div>
+                            <div class="gift-x-desc">Điểm danh hôm nay nhận 50 xu miễn phí!</div>
+                        </div>
+                        <button class="gift-x-claim" data-gift="daily">NHẬN</button>
+                    </div>
+                    <div class="gift-x-card">
+                        <div class="gift-x-icon">X</div>
+                        <div class="gift-x-info">
+                            <div class="gift-x-name">Quà tặng X - Sự kiện</div>
+                            <div class="gift-x-desc">Sự kiện khai trương - Nhận 200 xu!</div>
+                        </div>
+                        <button class="gift-x-claim" data-gift="event">NHẬN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- KHUNG CỬA HÀNG -->
@@ -720,9 +1397,24 @@
         </div>
     </div>
 
+    <!-- KHUNG KẾT QUẢ (THUA / HÒA) -->
+    <div id="resultOverlay" class="result-overlay">
+        <div id="resultModal" class="result-modal">
+            <div id="resultEmoji" class="result-emoji">😢</div>
+            <div id="resultTitle" class="result-title">BẠN ĐÃ THUA</div>
+            <div id="resultSubtitle" class="result-subtitle">Đừng buồn, thử lại nhé!</div>
+            <div id="countdownLabel" class="countdown-label">Chơi lại sau</div>
+            <div id="countdownDisplay" class="countdown-display">9</div>
+            <button id="btnReplay" class="btn-replay disabled">CHƠI LẠI</button>
+        </div>
+    </div>
+
     <script>
         (function() {
             const STORAGE_KEY = 'xo_offline_user_id';
+            const COUNTDOWN_KEY = 'xo_countdown_end';
+            const RESULT_KEY = 'xo_last_result';
+            const COUNTDOWN_DURATION = 9000; // 9 giây
 
             // ========== TRẠNG THÁI GAME ==========
             let board = ['', '', '', '', '', '', '', '', ''];
@@ -732,6 +1424,8 @@
             let gameActive = true;
             let userId = null;
             let isAiThinking = false;
+            let countdownInterval = null;
+            let countdownEndTime = 0;
 
             // DOM
             const loginScreen = document.getElementById('loginScreen');
@@ -752,6 +1446,24 @@
             const shopFloatBtn = document.getElementById('shopFloatBtn');
             const shopModalOverlay = document.getElementById('shopModalOverlay');
             const shopCloseBtn = document.getElementById('shopCloseBtn');
+
+            // Mailbox DOM
+            const mailboxFloatBtn = document.getElementById('mailboxFloatBtn');
+            const mailboxModalOverlay = document.getElementById('mailboxModalOverlay');
+            const mailboxCloseBtn = document.getElementById('mailboxCloseBtn');
+            const mailboxTabs = document.querySelectorAll('.mailbox-tab');
+            const mailboxPanes = document.querySelectorAll('.mailbox-tab-pane');
+            const giftClaimBtns = document.querySelectorAll('.gift-x-claim');
+
+            // Result DOM
+            const resultOverlay = document.getElementById('resultOverlay');
+            const resultModal = document.getElementById('resultModal');
+            const resultEmoji = document.getElementById('resultEmoji');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+            const countdownLabel = document.getElementById('countdownLabel');
+            const countdownDisplay = document.getElementById('countdownDisplay');
+            const btnReplay = document.getElementById('btnReplay');
 
             // ========== TIỆN ÍCH ==========
             function generateRandomId() {
@@ -780,6 +1492,8 @@
                 mainScreen.style.display = 'none';
                 loginScreen.style.display = 'flex';
                 closeShop();
+                closeMailbox();
+                closeResult();
                 resetGame();
             }
 
@@ -791,6 +1505,8 @@
                     loginScreen.style.display = 'none';
                     mainScreen.style.display = 'flex';
                     showWelcome();
+                    // Kiểm tra nếu có đếm ngược đang chạy (tải lại trang)
+                    checkPendingCountdown();
                 } else {
                     loginScreen.style.display = 'flex';
                     mainScreen.style.display = 'none';
@@ -801,17 +1517,42 @@
             function openShop() {
                 shopModalOverlay.classList.add('active');
             }
-
             function closeShop() {
                 shopModalOverlay.classList.remove('active');
             }
+
+            // ========== HỘP THƯ ==========
+            function openMailbox() {
+                mailboxModalOverlay.classList.add('active');
+            }
+            function closeMailbox() {
+                mailboxModalOverlay.classList.remove('active');
+            }
+
+            function switchMailboxTab(tabName) {
+                mailboxTabs.forEach(t => {
+                    t.classList.toggle('active', t.dataset.tab === tabName);
+                });
+                mailboxPanes.forEach(p => {
+                    p.classList.toggle('active', p.dataset.pane === tabName);
+                });
+            }
+
+            // Xử lý nhận quà
+            giftClaimBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.classList.contains('claimed')) return;
+                    btn.classList.add('claimed');
+                    btn.textContent = 'ĐÃ NHẬN';
+                    // Có thể thêm hiệu ứng thông báo
+                });
+            });
 
             // ========== CHUYỂN MÀN HÌNH ==========
             function showWelcome() {
                 welcomeScreen.style.display = 'flex';
                 gameScreen.style.display = 'none';
             }
-
             function showGame() {
                 welcomeScreen.style.display = 'none';
                 gameScreen.style.display = 'flex';
@@ -955,6 +1696,8 @@
                     gameStatus.textContent = 'HÒA! 🤝 (Bạn chơi rất tốt!)';
                     gameStatus.className = 'game-status draw';
                     updateBoardUI();
+                    // Hiện khung hòa
+                    setTimeout(() => showResult('draw'), 600);
                     return;
                 }
 
@@ -991,6 +1734,8 @@
                     gameStatus.className = 'game-status lose';
                     highlightWinCells(aiPlayer);
                     updateBoardUI();
+                    // Hiện khung thua
+                    setTimeout(() => showResult('lose'), 600);
                     return;
                 }
                 if (checkDraw()) {
@@ -998,6 +1743,7 @@
                     gameStatus.textContent = 'HÒA! 🤝';
                     gameStatus.className = 'game-status draw';
                     updateBoardUI();
+                    setTimeout(() => showResult('draw'), 600);
                     return;
                 }
 
@@ -1020,6 +1766,117 @@
                 return board.every(c => c !== '');
             }
 
+            // ========== KHUNG KẾT QUẢ + ĐẾM NGƯỢC ==========
+            function showResult(type) {
+                // type: 'lose' hoặc 'draw'
+                const endTime = Date.now() + COUNTDOWN_DURATION;
+                countdownEndTime = endTime;
+
+                // Lưu vào localStorage để không mất khi tải lại
+                localStorage.setItem(COUNTDOWN_KEY, endTime.toString());
+                localStorage.setItem(RESULT_KEY, type);
+
+                // Hiển thị khung
+                displayResultModal(type);
+                startCountdown(endTime);
+            }
+
+            function displayResultModal(type) {
+                resultOverlay.classList.add('active');
+
+                if (type === 'lose') {
+                    resultModal.className = 'result-modal lose';
+                    resultEmoji.textContent = '😢';
+                    resultTitle.textContent = 'BẠN ĐÃ THUA';
+                    resultSubtitle.textContent = 'Đừng buồn, thử lại nhé!';
+                } else if (type === 'draw') {
+                    resultModal.className = 'result-modal draw';
+                    resultEmoji.textContent = '🤝';
+                    resultTitle.textContent = 'HÒA';
+                    resultSubtitle.textContent = 'Bạn chơi rất tốt!';
+                }
+            }
+
+            function startCountdown(endTime) {
+                // Xóa interval cũ nếu có
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+
+                // Khóa nút chơi lại
+                btnReplay.classList.remove('enabled');
+                btnReplay.classList.add('disabled');
+                btnReplay.textContent = 'CHƠI LẠI';
+
+                function update() {
+                    const now = Date.now();
+                    const remaining = Math.max(0, Math.ceil((endTime - now) / 1000));
+
+                    countdownDisplay.textContent = remaining;
+
+                    // Hiệu ứng tick
+                    if (remaining <= 3 && remaining > 0) {
+                        countdownDisplay.classList.add('tick');
+                    } else {
+                        countdownDisplay.classList.remove('tick');
+                    }
+
+                    if (remaining <= 0) {
+                        // Kết thúc đếm ngược
+                        clearInterval(countdownInterval);
+                        countdownInterval = null;
+                        countdownDisplay.textContent = '0';
+                        countdownDisplay.classList.remove('tick');
+                        countdownLabel.textContent = 'SẴN SÀNG!';
+                        // Mở khóa nút chơi lại
+                        btnReplay.classList.remove('disabled');
+                        btnReplay.classList.add('enabled');
+                        btnReplay.textContent = 'CHƠI LẠI';
+                        // Xóa localStorage đếm ngược
+                        localStorage.removeItem(COUNTDOWN_KEY);
+                        localStorage.removeItem(RESULT_KEY);
+                    }
+                }
+
+                update(); // Cập nhật ngay
+                countdownInterval = setInterval(update, 200);
+            }
+
+            function closeResult() {
+                resultOverlay.classList.remove('active');
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                }
+                // KHÔNG xóa localStorage ở đây — chỉ xóa khi đếm xong
+            }
+
+            // Khi tải lại trang, nếu có đếm ngược đang chạy -> hiện lại
+            function checkPendingCountdown() {
+                const endTimeStr = localStorage.getItem(COUNTDOWN_KEY);
+                const resultType = localStorage.getItem(RESULT_KEY);
+                if (!endTimeStr || !resultType) return;
+
+                const endTime = parseInt(endTimeStr, 10);
+                const now = Date.now();
+
+                if (now >= endTime) {
+                    // Đã hết thời gian -> xóa
+                    localStorage.removeItem(COUNTDOWN_KEY);
+                    localStorage.removeItem(RESULT_KEY);
+                    return;
+                }
+
+                // Vẫn còn thời gian -> hiện khung kết quả và tiếp tục đếm
+                showGame();
+                gameActive = false;
+                isAiThinking = false;
+                displayResultModal(resultType);
+                startCountdown(endTime);
+            }
+
+            // ========== RESET GAME ==========
             function resetGame() {
                 board = ['', '', '', '', '', '', '', '', ''];
                 currentPlayer = humanPlayer;
@@ -1039,6 +1896,13 @@
                     }, 500);
                 }
             }
+
+            // ========== XỬ LÝ NÚT CHƠI LẠI ==========
+            btnReplay.addEventListener('click', () => {
+                if (btnReplay.classList.contains('disabled')) return;
+                closeResult();
+                resetGame();
+            });
 
             // ========== SỰ KIỆN ==========
             function init() {
@@ -1087,10 +1951,24 @@
                     if (e.target === shopModalOverlay) closeShop();
                 });
 
-                // Đóng shop khi nhấn ESC
+                // Mailbox events
+                mailboxFloatBtn.addEventListener('click', openMailbox);
+                mailboxCloseBtn.addEventListener('click', closeMailbox);
+                mailboxModalOverlay.addEventListener('click', (e) => {
+                    if (e.target === mailboxModalOverlay) closeMailbox();
+                });
+
+                mailboxTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        switchMailboxTab(tab.dataset.tab);
+                    });
+                });
+
+                // Đóng modal khi nhấn ESC
                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && shopModalOverlay.classList.contains('active')) {
-                        closeShop();
+                    if (e.key === 'Escape') {
+                        if (shopModalOverlay.classList.contains('active')) closeShop();
+                        if (mailboxModalOverlay.classList.contains('active')) closeMailbox();
                     }
                 });
             }
