@@ -1,963 +1,642 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BANGMOD — Đăng Nhập</title>
-<style>
-* { margin:0; padding:0; box-sizing:border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOOL FIX RỖNG 2027 NCB</title>
+    <!-- Bỏ icon website (favicon trống) -->
+    <link rel="icon" href="data:,">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 25px;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            letter-spacing: 1px;
+        }
+        .device-id-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            text-align: center;
+        }
+        .device-id-box label {
+            display: block;
+            color: #0ff;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .device-id-box .id-value {
+            font-size: 20px;
+            color: #fff;
+            font-weight: bold;
+            word-break: break-all;
+            background: rgba(0, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed rgba(0, 255, 255, 0.5);
+        }
+        .key-section {
+            margin-bottom: 20px;
+        }
+        .key-section label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .key-section input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .key-section input:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .key-section input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .btn-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .message {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+        .message.error {
+            color: #ff4444;
+        }
+        .message.success {
+            color: #0ff;
+        }
+        .getkey-links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .getkey-links a {
+            color: #0ff;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .getkey-links a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .timer {
+            color: #ff4444;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Main tool screen */
+        .tool-screen h2 {
+            color: #0ff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .tool-screen .input-group {
+            margin-bottom: 20px;
+        }
+        .tool-screen .input-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .tool-screen .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+        .tool-screen .input-group input:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        .progress-container {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            height: 30px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #0ff, #00b3ff);
+            border-radius: 10px;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 0 0 5px #000;
+            z-index: 2;
+        }
+        .status-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .status-text.success {
+            color: #0ff;
+            animation: glow 1s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #0ff; }
+            to { text-shadow: 0 0 20px #0ff, 0 0 30px #0ff; }
+        }
+        .status-text.processing {
+            color: #ffaa00;
+        }
+        .success-icon {
+            font-size: 50px;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .note {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
 
-body {
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: radial-gradient(circle at 50% 30%, #1A0A2A 0%, #0A0A0F 60%, #000 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #FFF;
-    padding: 20px;
-    overflow: hidden;
-    position: relative;
-}
-
-body::before {
-    content: '';
-    position: absolute;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(160,32,240,0.15) 0%, transparent 70%);
-    border-radius: 50%;
-    top: -200px; left: -200px;
-    animation: float 8s ease-in-out infinite;
-}
-
-body::after {
-    content: '';
-    position: absolute;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(0,255,136,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    bottom: -150px; right: -150px;
-    animation: float 10s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-    0%,100% { transform: translate(0,0); }
-    50% { transform: translate(30px,30px); }
-}
-
-.container {
-    background: rgba(15, 15, 25, 0.95);
-    border: 2px solid #A020F0;
-    border-radius: 28px;
-    padding: 50px 40px;
-    max-width: 480px;
-    width: 100%;
-    text-align: center;
-    box-shadow:
-        0 0 60px rgba(160,32,240,0.4),
-        0 0 120px rgba(160,32,240,0.15),
-        inset 0 0 30px rgba(160,32,240,0.05);
-    position: relative;
-    z-index: 10;
-    animation: appear 0.6s ease-out;
-}
-
-@keyframes appear {
-    from { opacity:0; transform: translateY(30px) scale(0.95); }
-    to { opacity:1; transform: translateY(0) scale(1); }
-}
-
-.logo-wrap { margin-bottom: 30px; }
-
-.logo-icon {
-    font-size: 72px;
-    color: #A020F0;
-    text-shadow: 0 0 20px rgba(160,32,240,0.8), 0 0 40px rgba(160,32,240,0.5);
-    animation: glow 2.5s ease-in-out infinite;
-    display: inline-block;
-}
-
-@keyframes glow {
-    0%,100% { text-shadow: 0 0 20px rgba(160,32,240,0.8), 0 0 40px rgba(160,32,240,0.5); }
-    50% { text-shadow: 0 0 30px rgba(160,32,240,1), 0 0 60px rgba(160,32,240,0.8), 0 0 90px rgba(160,32,240,0.4); }
-}
-
-.title {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: 4px;
-    color: #A020F0;
-    margin-bottom: 8px;
-    text-shadow: 0 0 20px rgba(160,32,240,0.6);
-}
-
-.subtitle {
-    font-size: 13px;
-    color: #666;
-    letter-spacing: 2px;
-    margin-bottom: 40px;
-    text-transform: uppercase;
-}
-
-/* ===== MÀN CHỜ ===== */
-.checking-screen { display: none; padding: 20px 0; }
-.checking-screen.show { display: block; }
-
-.checking-spinner {
-    width: 60px; height: 60px;
-    border: 4px solid rgba(160,32,240,0.2);
-    border-top-color: #A020F0;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 24px;
-    box-shadow: 0 0 30px rgba(160,32,240,0.4);
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.checking-title {
-    font-size: 16px; color: #A020F0; margin-bottom: 8px; font-weight: 600;
-}
-.checking-sub { font-size: 13px; color: #666; }
-
-/* ===== MÀN ĐÃ ĐĂNG NHẬP ===== */
-.logged-screen { display: none; }
-.logged-screen.show { display: block; }
-
-.success-icon {
-    font-size: 64px; margin-bottom: 16px;
-    animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes bounceIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
-}
-
-.logged-title {
-    font-size: 22px; color: #00FF88; margin-bottom: 8px; font-weight: 700;
-}
-
-.logged-sub { font-size: 13px; color: #888; margin-bottom: 30px; }
-
-.info-card {
-    background: #0A0A0F;
-    border: 1px solid #2A2A3A;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.info-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    font-size: 13px;
-    border-bottom: 1px solid #1A1A24;
-}
-
-.info-row:last-child { border-bottom: none; }
-.info-row .lbl { color: #666; }
-.info-row .val {
-    color: #A020F0;
-    font-family: 'Courier New', monospace;
-    font-weight: 600;
-}
-.info-row .val.green { color: #00FF88; }
-.info-row .val.yellow { color: #FFAA00; }
-.info-row .val.red { color: #FF3333; }
-
-.btn-enter, .btn-logout {
-    padding: 18px 12px;
-    border: none;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    transition: all 0.25s;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 56px;
-    color: #FFF;
-    width: 100%;
-    margin-top: 14px;
-}
-
-.btn-enter {
-    background: linear-gradient(135deg, #00FF88, #00AA55);
-    color: #0A0A0F;
-    box-shadow: 0 5px 20px rgba(0,255,136,0.4);
-    min-height: 60px;
-    font-size: 15px;
-}
-
-.btn-enter:hover {
-    box-shadow: 0 8px 30px rgba(0,255,136,0.7);
-    transform: translateY(-2px);
-}
-
-.btn-logout {
-    background: transparent;
-    border: 2px solid #FF3333;
-    color: #FF3333;
-}
-
-.btn-logout:hover {
-    background: rgba(255,51,51,0.1);
-    box-shadow: 0 5px 20px rgba(255,51,51,0.3);
-}
-
-.status {
-    min-height: 24px;
-    font-size: 13px;
-    text-align: center;
-    margin-bottom: 20px;
-    transition: all 0.3s;
-    opacity: 0;
-    transform: translateY(-5px);
-}
-
-.status.show { opacity: 1; transform: translateY(0); }
-.status.success { color: #00FF88; }
-.status.error   { color: #FF3333; }
-.status.info    { color: #A020F0; }
-
-/* ================== NÚT CHÍNH (Uiverse) ================== */
-.main-btn {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 3.5rem;
-    overflow: hidden;
-    background-size: 300% 300%;
-    cursor: pointer;
-    backdrop-filter: blur(1rem);
-    border-radius: 5rem;
-    transition: 0.5s;
-    animation: gradient_301 5s ease infinite;
-    border: double 4px transparent;
-    background-image: linear-gradient(#212121, #212121),
-        linear-gradient(
-            137.48deg,
-            #ffdb3b 10%,
-            #fe53bb 45%,
-            #8f51ea 67%,
-            #0044ff 87%
-        );
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    margin-top: 10px;
-}
-
-.main-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    animation: none;
-}
-
-.main-btn:disabled:hover {
-    transform: none;
-}
-
-.main-btn .btn-stars-container {
-    position: absolute;
-    z-index: -1;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    transition: 0.5s;
-    backdrop-filter: blur(1rem);
-    border-radius: 5rem;
-}
-
-.main-btn strong {
-    z-index: 2;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
-    font-size: 13px;
-    letter-spacing: 4px;
-    color: #ffffff;
-    text-shadow: 0 0 4px white;
-    text-transform: uppercase;
-    font-weight: 700;
-}
-
-.main-btn .btn-glow {
-    position: absolute;
-    display: flex;
-    width: 12rem;
-}
-
-.main-btn .circle {
-    width: 100%;
-    height: 30px;
-    filter: blur(2rem);
-    animation: pulse_3011 4s infinite;
-    z-index: -1;
-}
-
-.main-btn .circle:nth-of-type(1) {
-    background: rgba(254, 83, 186, 0.636);
-}
-
-.main-btn .circle:nth-of-type(2) {
-    background: rgba(142, 81, 234, 0.704);
-}
-
-.main-btn:hover:not(:disabled) .btn-stars-container {
-    z-index: 1;
-    background-color: #212121;
-}
-
-.main-btn:hover:not(:disabled) {
-    transform: scale(1.03);
-}
-
-.main-btn:active:not(:disabled) {
-    border: double 4px #fe53bb;
-    background-origin: border-box;
-    background-clip: content-box, border-box;
-    animation: none;
-}
-
-.main-btn:active:not(:disabled) .circle {
-    background: #fe53bb;
-}
-
-.main-btn .stars {
-    position: relative;
-    background: transparent;
-    width: 200rem;
-    height: 200rem;
-}
-
-.main-btn .stars::after {
-    content: "";
-    position: absolute;
-    top: -10rem;
-    left: -100rem;
-    width: 100%;
-    height: 100%;
-    animation: animStarRotate 90s linear infinite;
-    background-image: radial-gradient(#ffffff 1px, transparent 1%);
-    background-size: 50px 50px;
-}
-
-.main-btn .stars::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -50%;
-    width: 170%;
-    height: 500%;
-    animation: animStar 60s linear infinite;
-    background-image: radial-gradient(#ffffff 1px, transparent 1%);
-    background-size: 50px 50px;
-    opacity: 0.5;
-}
-
-@keyframes animStar {
-    from { transform: translateY(0); }
-    to   { transform: translateY(-135rem); }
-}
-
-@keyframes animStarRotate {
-    from { transform: rotate(360deg); }
-    to   { transform: rotate(0); }
-}
-
-@keyframes gradient_301 {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes pulse_3011 {
-    0% {
-        transform: scale(0.75);
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-    }
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-    }
-    100% {
-        transform: scale(0.75);
-        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
-    }
-}
-
-.spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid rgba(255,255,255,0.3);
-    border-top-color: #FFF;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: inline-block;
-}
-
-.info-footer {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #1E1E2A;
-    font-size: 11px;
-    color: #444;
-    letter-spacing: 1px;
-    line-height: 1.8;
-}
-
-.info-footer a {
-    color: #A020F0;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Modal */
-.modal-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(6px);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 20px;
-}
-
-.modal-overlay.show { display: flex; animation: fadeIn 0.3s; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.modal {
-    background: #15151F;
-    border: 2px solid #A020F0;
-    border-radius: 24px;
-    padding: 35px 30px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 0 60px rgba(160,32,240,0.6);
-    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes popIn {
-    from { transform: scale(0.7); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.modal-icon { font-size: 56px; margin-bottom: 16px; }
-.modal-title { font-size: 20px; color: #A020F0; margin-bottom: 8px; font-weight: 700; }
-.modal-sub { font-size: 13px; color: #888; margin-bottom: 24px; line-height: 1.6; white-space: pre-line; }
-
-.modal-btn {
-    width: 100%;
-    padding: 15px;
-    background: linear-gradient(135deg, #A020F0, #6A0FB0);
-    color: #FFF;
-    border: none;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-transform: uppercase;
-}
-
-.modal-btn:hover {
-    box-shadow: 0 5px 20px rgba(160,32,240,0.6);
-    transform: translateY(-2px);
-}
-
-@media (max-width: 480px) {
-    .container { padding: 35px 25px; }
-    .title { font-size: 22px; }
-    .main-btn strong { font-size: 11px; letter-spacing: 3px; }
-}
-</style>
+        /* ============ NÚT VÀNG GOLD (btn-94) ============ */
+        .btn-94 {
+            --bg-color_94: #000;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            cursor: pointer;
+            text-decoration: none;
+            user-select: none;
+            transition: 500ms ease;
+            width: 170px;
+            height: 50px;
+            z-index: 1;
+            text-transform: uppercase;
+            background-size: 100%;
+            --bg-gold: linear-gradient(90deg, #893c15 0%, #ffde44 17%, #b1741e 24%, #ffe752 40%, #e09326 50%, #e4962a 59%, #b0781b 70%, #efb333 85%, #873a1a 100%);
+            background: var(--bg-gold);
+            box-sizing: border-box;
+        }
+        .btn-94 span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            background: var(--bg-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-94::before {
+            position: absolute;
+            content: '';
+            inset: 3px;
+            border-radius: 10px;
+            background: var(--bg-color_94);
+            z-index: -1;
+            box-sizing: border-box;
+        }
+        .btn-94:hover {
+            animation: move_94 5s infinite alternate ease-in-out;
+            transform: scale(1.1);
+        }
+        .btn-94:hover span {
+            animation: move_94 5s infinite alternate ease-in-out;
+        }
+        .btn-94:active {
+            animation: move_94 1s infinite alternate ease-in-out;
+        }
+        .btn-94:active span {
+            animation: move_94 1s infinite alternate ease-in-out;
+        }
+        @keyframes move_94 {
+            0% { background-size: 100%; background-position: 50%; }
+            50% { background-size: 500%; background-position: 0%; }
+            100% { background-size: 200%; background-position: 100%; }
+        }
+        .btn-94:disabled {
+            pointer-events: none;
+            opacity: .65;
+            color: #7e7e7e;
+            background: #dcdcdc;
+            box-shadow: none;
+            --bg-color_94: #dcdcdc;
+            --bg-gold: #7e7e7e;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="logo-wrap">
-        <div class="logo-icon">Δ</div>
-    </div>
-
-    <!-- MÀN CHỜ -->
-    <div class="checking-screen" id="checkingScreen">
-        <div class="checking-spinner"></div>
-        <div class="checking-title">ĐANG KIỂM TRA THIẾT BỊ</div>
-        <div class="checking-sub">Vui lòng đợi trong giây lát...</div>
-    </div>
-
-    <!-- MÀN ĐÃ ĐĂNG NHẬP -->
-    <div class="logged-screen" id="loggedScreen">
-        <div class="success-icon">✅</div>
-        <div class="logged-title">ĐÃ ĐĂNG NHẬP</div>
-        <div class="logged-sub" id="loggedSub">Key của bạn còn hiệu lực</div>
-
-        <div class="info-card">
-            <div class="info-row">
-                <span class="lbl">Key</span>
-                <span class="val" id="dispKey">—</span>
-            </div>
-            <div class="info-row">
-                <span class="lbl">Trạng thái</span>
-                <span class="val green" id="dispStatus">Hoạt động</span>
-            </div>
-            <div class="info-row">
-                <span class="lbl">Hết hạn</span>
-                <span class="val yellow" id="dispExpire">—</span>
-            </div>
-            <div class="info-row">
-                <span class="lbl">Còn lại</span>
-                <span class="val green" id="dispRemain">—</span>
-            </div>
-            <div class="info-row">
-                <span class="lbl">Thiết bị</span>
-                <span class="val" id="dispHwid">—</span>
-            </div>
+<div class="container" id="app">
+    <!-- KEY SCREEN -->
+    <div id="keyScreen">
+        <h1>🔑 TOOL FIX RỖNG 2027 NCB</h1>
+        
+        <div class="device-id-box">
+            <label>ID Thiết Bị Của Bạn</label>
+            <div class="id-value" id="deviceIdDisplay">Đang tải...</div>
         </div>
 
-        <button class="btn-enter" onclick="enterWebsite()">🚀 VÀO WEBSITE</button>
-        <button class="btn-logout" onclick="logoutKey()">ĐĂNG XUẤT KEY</button>
-    </div>
-
-    <!-- MÀN ĐĂNG NHẬP BẰNG SERVER (KHÔNG NHẬP KEY) -->
-    <div class="key-screen" id="keyScreen" style="display:none;">
-        <div class="title">BANGMOD</div>
-        <div class="subtitle">Đăng Nhập Tự Động</div>
-
-        <div class="status show info" id="status" style="margin-bottom:30px;">
-            Hệ thống sẽ tự động kiểm tra key của thiết bị bạn trên server. Không cần nhập key.
+        <div class="key-section">
+            <label>Nhập Key Kích Hoạt</label>
+            <input type="text" id="keyInput" placeholder="VD: NCB_25281" autocomplete="off">
         </div>
 
-        <!-- Nút LẤY KEY FREE -->
-        <button class="main-btn" id="btnGet" onclick="getKey()">
-            <div class="btn-stars-container"><div class="stars"></div></div>
-            <div class="btn-glow">
-                <div class="circle"></div>
-                <div class="circle"></div>
-            </div>
-            <strong id="btnGetText">🎁 LẤY KEY (FREE)</strong>
-        </button>
+        <div class="btn-wrapper">
+            <button class="btn-94" id="activateBtn"><span>KÍCH HOẠT</span></button>
+        </div>
+        
+        <div class="message" id="keyMessage"></div>
+        <div class="timer" id="timerDisplay"></div>
 
-        <!-- Nút ĐĂNG NHẬP -->
-        <button class="main-btn" id="btnLogin" onclick="loginByDevice()">
-            <div class="btn-stars-container"><div class="stars"></div></div>
-            <div class="btn-glow">
-                <div class="circle"></div>
-                <div class="circle"></div>
-            </div>
-            <strong id="btnLoginText">🔐 ĐĂNG NHẬP</strong>
-        </button>
+        <div class="getkey-links">
+            <span style="color:#fff;">Lấy Key Tại:</span>
+            <a href="https://layma.net" target="_blank">LAYMA.NET</a>
+            <a href="https://yeumoney.com" target="_blank">YEUMONEY.COM</a>
+        </div>
+        <div class="note">Key có hiệu lực 24 giờ (giờ Việt Nam)</div>
     </div>
 
-    <div class="info-footer">
-        Key được lưu trên server · Tự động đăng nhập<br>
-        <a onclick="showHelp()">Hướng dẫn</a> ·
-        <a onclick="showTerms()">Điều khoản</a>
-    </div>
-</div>
+    <!-- TOOL SCREEN -->
+    <div id="toolScreen" class="tool-screen hidden">
+        <h1>🚀 FIX RỖNG TIKTOK</h1>
+        <div class="input-group">
+            <label>Nhập ID TikTok</label>
+            <input type="text" id="tiktokIdInput" placeholder="Nhập ID TikTok cần fix..." autocomplete="off">
+        </div>
+        <div class="btn-wrapper">
+            <button class="btn-94" id="fixBtn"><span>FIX NGAY</span></button>
+        </div>
 
-<!-- Modal thông báo -->
-<div class="modal-overlay" id="msgModal">
-    <div class="modal">
-        <div class="modal-icon" id="msgIcon">ℹ️</div>
-        <div class="modal-title" id="msgTitle">Thông báo</div>
-        <div class="modal-sub" id="msgText">Nội dung</div>
-        <button class="modal-btn" id="msgBtn">ĐÃ HIỂU</button>
+        <div class="progress-container hidden" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+            <div class="progress-text" id="progressText">0%</div>
+        </div>
+
+        <div class="status-text" id="statusText"></div>
+        <div class="success-icon hidden" id="successIcon">✅</div>
+        
+        <div class="note" style="margin-top:20px;">
+            <a href="#" id="logoutLink" style="color:#ff4444;">Đăng xuất / Đổi Key</a>
+        </div>
     </div>
 </div>
 
 <script>
-// ================== CẤU HÌNH SERVER ==================
-const API_SERVER = "https://api.bangmod.example.com";
-const ENDPOINT_AUTH   = "/api/auth";
-const ENDPOINT_GET    = "/api/getkey";
-const ENDPOINT_LOGOUT = "/api/logoutkey";
-
-const SERVER_KEY = "ea319884-b8a4-4e22-8eb4-93a672293748";
-const ACCESS_KEY = "335c2c33-4042-417f-a70f-95009e9ebee6";
-
-const WORKINK_URL = "https://work.ink/34jy/f6b3efb3-04e8-4508-a5b9-edfd25307236";
-
-// ================== DOM ==================
-const checkingScreen = document.getElementById('checkingScreen');
-const loggedScreen   = document.getElementById('loggedScreen');
-const keyScreen      = document.getElementById('keyScreen');
-const statusEl       = document.getElementById('status');
-const btnGet         = document.getElementById('btnGet');
-const btnLogin       = document.getElementById('btnLogin');
-const msgModal       = document.getElementById('msgModal');
-
-let currentKeyData = null;
-
-// ================== KHỞI TẠO ==================
-window.addEventListener('load', async () => {
-    showScreen('checking');
-
-    const hwid = await getHWID();
-
-    try {
-        const data = await serverAuth(hwid);
-
-        if (data && data.has_key && data.expire_at > Date.now()) {
-            currentKeyData = data;
-            saveLocalKey(data);
-            showLoggedScreen(data);
-            return;
-        }
-
-        if (data && data.has_key && data.expire_at <= Date.now()) {
-            showLoginScreen();
-            showStatus('Key đã hết hạn — bấm LẤY KEY để nhận key mới', 'error');
-            return;
-        }
-
-        showLoginScreen();
-    } catch (err) {
-        // Fallback local
-        const saved = getLocalKey();
-        if (saved && saved.expire_at > Date.now()) {
-            currentKeyData = saved;
-            showLoggedScreen(saved);
-        } else {
-            showLoginScreen();
-            if (saved && saved.expire_at <= Date.now()) {
-                showStatus('Key đã hết hạn — bấm LẤY KEY để nhận key mới', 'error');
-            }
-        }
-    }
-});
-
-// ================== CHUYỂN MÀN HÌNH ==================
-function showScreen(name) {
-    checkingScreen.classList.toggle('show', name === 'checking');
-    loggedScreen.classList.toggle('show', name === 'logged');
-    keyScreen.style.display = name === 'login' ? 'block' : 'none';
-}
-
-function showLoginScreen() {
-    showScreen('login');
-}
-
-function showLoggedScreen(data) {
-    showScreen('logged');
-    currentKeyData = data;
-
-    document.getElementById('dispKey').textContent = maskKey(data.key);
-    document.getElementById('dispStatus').textContent = 'Hoạt động';
-    document.getElementById('dispStatus').className = 'val green';
-
-    const exp = new Date(data.expire_at);
-    document.getElementById('dispExpire').textContent = formatDate(exp);
-
-    const remain = data.expire_at - Date.now();
-    document.getElementById('dispRemain').textContent = formatRemain(remain);
-
-    document.getElementById('dispHwid').textContent = (data.hwid || '').slice(0, 12) + '...';
-
-    if (remain < 24 * 60 * 60 * 1000) {
-        document.getElementById('dispStatus').textContent = 'Sắp hết hạn';
-        document.getElementById('dispStatus').className = 'val yellow';
-    }
-}
-
-// ================== STATUS ==================
-function showStatus(text, type = 'info') {
-    statusEl.textContent = text;
-    statusEl.className = 'status show ' + type;
-}
-
-// ================== SERVER CALLS ==================
-async function serverAuth(hwid) {
-    const res = await fetch(API_SERVER + ENDPOINT_AUTH, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Server-Key': SERVER_KEY,
-            'X-Access-Key': ACCESS_KEY
-        },
-        body: JSON.stringify({ hwid: hwid })
-    });
-    if (!res.ok) throw new Error('Auth fail');
-    return await res.json();
-}
-
-async function serverGetKey(hwid) {
-    const res = await fetch(API_SERVER + ENDPOINT_GET, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Server-Key': SERVER_KEY,
-            'X-Access-Key': ACCESS_KEY
-        },
-        body: JSON.stringify({ hwid: hwid, timestamp: Date.now() })
-    });
-    if (!res.ok) throw new Error('Get key fail');
-    return await res.json();
-}
-
-async function serverLogout(hwid) {
-    try {
-        await fetch(API_SERVER + ENDPOINT_LOGOUT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Server-Key': SERVER_KEY,
-                'X-Access-Key': ACCESS_KEY
-            },
-            body: JSON.stringify({ hwid: hwid })
-        });
-    } catch (e) {}
-}
-
-// ================== LOCAL STORAGE ==================
-function saveLocalKey(data) {
-    try { localStorage.setItem('bangmod_key_data', JSON.stringify(data)); } catch (e) {}
-}
-function getLocalKey() {
-    try {
-        const s = localStorage.getItem('bangmod_key_data');
-        return s ? JSON.parse(s) : null;
-    } catch (e) { return null; }
-}
-function clearLocalKey() {
-    localStorage.removeItem('bangmod_key_data');
-}
-
-// ================== LẤY KEY ==================
-function getKey() {
-    btnGet.disabled = true;
-    document.getElementById('btnGetText').innerHTML = '<span class="spinner"></span> ĐANG CHUYỂN...';
-
-    localStorage.setItem('bangmod_workink_clicked', Date.now().toString());
-
-    setTimeout(async () => {
-        const lastClick = parseInt(localStorage.getItem('bangmod_workink_clicked') || '0');
-        const cooldown = 8000;
-
-        if (Date.now() - lastClick < cooldown) {
-            window.open(WORKINK_URL, '_blank');
-            showMessage(
-                '🔗',
-                'ĐÃ MỞ TRANG LẤY KEY',
-                'Hoàn tất các bước trên work.ink.\nSau đó quay lại đây và bấm LẤY KEY lần nữa để nhận key từ server.',
-                () => {
-                    btnGet.disabled = false;
-                    document.getElementById('btnGetText').innerHTML = '🎁 LẤY KEY (FREE)';
-                    showStatus('Hoàn tất work.ink rồi bấm LẤY KEY lần nữa', 'info');
-                }
-            );
-            return;
-        }
-
-        // Đủ thời gian → gọi server lấy key
-        try {
-            const hwid = await getHWID();
-            const data = await serverGetKey(hwid);
-
-            if (!data || !data.key) throw new Error('Server không trả key');
-
-            // Lưu vào local + hiển thị luôn
-            const keyData = {
-                key: data.key,
-                expire_at: data.expire_at || (Date.now() + 7 * 24 * 60 * 60 * 1000),
-                hwid: hwid,
-                status: 'active'
-            };
-            saveLocalKey(keyData);
-            currentKeyData = keyData;
-
-            btnGet.disabled = false;
-            document.getElementById('btnGetText').innerHTML = '🎁 LẤY KEY (FREE)';
-
-            showLoggedScreen(keyData);
-        } catch (err) {
-            // Fallback local demo
-            const key = generateLocalKey();
-            const keyData = {
-                key: key,
-                expire_at: Date.now() + 7 * 24 * 60 * 60 * 1000,
-                hwid: await getHWID(),
-                status: 'active'
-            };
-            saveLocalKey(keyData);
-            currentKeyData = keyData;
-
-            btnGet.disabled = false;
-            document.getElementById('btnGetText').innerHTML = '🎁 LẤY KEY (FREE)';
-
-            showLoggedScreen(keyData);
-        }
-    }, 600);
-}
-
-function generateLocalKey() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let random = '';
-    for (let i = 0; i < 24; i++) {
-        random += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    const parts = random.match(/.{1,6}/g) || [];
-    return 'BANGMOD-' + parts.join('-');
-}
-
-// ================== ĐĂNG NHẬP THEO THIẾT BỊ ==================
-async function loginByDevice() {
-    btnLogin.disabled = true;
-    document.getElementById('btnLoginText').innerHTML = '<span class="spinner"></span> ĐANG ĐĂNG NHẬP...';
-
-    try {
-        const hwid = await getHWID();
-        const data = await serverAuth(hwid);
-
-        if (data && data.has_key && data.expire_at > Date.now()) {
-            currentKeyData = data;
-            saveLocalKey(data);
-            showLoggedScreen(data);
-        } else if (data && data.has_key && data.expire_at <= Date.now()) {
-            showStatus('Key đã hết hạn — bấm LẤY KEY để nhận key mới', 'error');
-        } else {
-            showStatus('Thiết bị chưa có key — bấm LẤY KEY để nhận', 'error');
-        }
-    } catch (err) {
-        // Fallback local
-        const saved = getLocalKey();
-        if (saved && saved.expire_at > Date.now()) {
-            currentKeyData = saved;
-            showLoggedScreen(saved);
-        } else {
-            showStatus('Không kết nối được server — thử lại sau', 'error');
-        }
-    } finally {
-        btnLogin.disabled = false;
-        document.getElementById('btnLoginText').innerHTML = '🔐 ĐĂNG NHẬP';
-    }
-}
-
-// ================== ĐĂNG XUẤT ==================
-async function logoutKey() {
-    const hwid = await getHWID();
-    await serverLogout(hwid);
-    clearLocalKey();
-    currentKeyData = null;
-    showLoginScreen();
-    showStatus('Đã đăng xuất key', 'info');
-}
-
-// ================== VÀO WEBSITE ==================
-function enterWebsite() {
-    // Chuyển trang chính
-    // window.location.href = 'main.html';
-    showMessage(
-        '🚀',
-        'THÀNH CÔNG',
-        'Bạn có thể sử dụng đầy đủ tính năng BANGMOD.\n(Tích hợp chuyển trang tại đây)',
-    );
-}
-
-// ================== HWID ==================
-async function getHWID() {
-    let base = '';
-    if (window.Android && window.Android.getAndroidId) {
-        base += window.Android.getAndroidId();
-    }
-    base += navigator.userAgent;
-    base += navigator.language;
-    base += screen.width + 'x' + screen.height;
-    base += navigator.hardwareConcurrency || '';
-
-    try {
-        const buf = new TextEncoder().encode(base);
-        const hash = await crypto.subtle.digest('SHA-256', buf);
-        return Array.from(new Uint8Array(hash))
-            .map(b => b.toString(16).padStart(2, '0'))
-            .join('');
-    } catch (e) {
-        let h = 0;
-        for (let i = 0; i < base.length; i++) {
-            h = ((h << 5) - h) + base.charCodeAt(i);
-            h |= 0;
-        }
-        return Math.abs(h).toString(16);
-    }
-}
-
-// ================== HELPERS ==================
-function maskKey(k) {
-    if (!k) return '—';
-    if (k.length <= 12) return k;
-    return k.slice(0, 8) + '****' + k.slice(-4);
-}
-
-function formatDate(d) {
-    const pad = n => String(n).padStart(2, '0');
-    return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() +
-        ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
-}
-
-function formatRemain(ms) {
-    if (ms <= 0) return 'Hết hạn';
-    const d = Math.floor(ms / 86400000);
-    const h = Math.floor((ms % 86400000) / 3600000);
-    const m = Math.floor((ms % 3600000) / 60000);
-    if (d > 0) return d + ' ngày ' + h + ' giờ';
-    if (h > 0) return h + ' giờ ' + m + ' phút';
-    return m + ' phút';
-}
-
-// ================== MODAL ==================
-function closeModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
-
-function showMessage(icon, title, text, callback) {
-    document.getElementById('msgIcon').textContent = icon;
-    document.getElementById('msgTitle').textContent = title;
-    document.getElementById('msgText').textContent = text;
-    msgModal.classList.add('show');
-
-    const btn = document.getElementById('msgBtn');
-    btn.onclick = () => {
-        closeModal('msgModal');
-        if (callback) callback();
+    // ================= CONFIG =================
+    const KEY_CONFIG = {
+        validKeys: [
+            "NCB_25281",
+            "BANGFREE1_28203",
+            "YEUMONEY1_40"
+        ],
+        validityDuration: 24 * 60 * 60 * 1000, // 24 giờ
+        fixDuration: 300 // 5 phút = 300 giây
     };
-}
 
-function showHelp() {
-    showMessage(
-        '❓',
-        'HƯỚNG DẪN',
-        '1. Bấm "LẤY KEY (FREE)" → chuyển sang work.ink\n2. Hoàn tất các bước trên work.ink\n3. Quay lại đây, bấm "LẤY KEY" lần nữa để nhận key từ server\n4. Bấm "ĐĂNG NHẬP" để kích hoạt\n5. Lần sau mở web sẽ tự động đăng nhập nếu key còn hạn',
-    );
-}
+    // ================= DEVICE ID =================
+    function getDeviceId() {
+        let deviceId = localStorage.getItem('ncb_device_id');
+        if (!deviceId) {
+            const randomPart = Math.floor(Math.random() * 90000) + 10000;
+            const timestamp = Date.now().toString(36).toUpperCase();
+            deviceId = `NCB_${randomPart}_${timestamp}`;
+            localStorage.setItem('ncb_device_id', deviceId);
+        }
+        return deviceId;
+    }
 
-function showTerms() {
-    showMessage(
-        '📜',
-        'ĐIỀU KHOẢN',
-        'Key chỉ dùng cho mục đích cá nhân. Không chia sẻ key công khai. Key gắn với HWID thiết bị. Vi phạm sẽ bị thu hồi.',
-    );
-}
+    // ================= KEY ACTIVATION =================
+    function getKeyInfo() {
+        const keyInfo = localStorage.getItem('ncb_key_info');
+        if (!keyInfo) return null;
+        try { return JSON.parse(keyInfo); } catch { return null; }
+    }
 
-msgModal.addEventListener('click', (e) => {
-    if (e.target === msgModal) msgModal.classList.remove('show');
-});
+    function saveKeyInfo(key) {
+        const info = {
+            key: key,
+            activatedAt: Date.now(),
+            expiresAt: Date.now() + KEY_CONFIG.validityDuration
+        };
+        localStorage.setItem('ncb_key_info', JSON.stringify(info));
+    }
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') msgModal.classList.remove('show');
-});
+    function isKeyValid() {
+        const info = getKeyInfo();
+        if (!info) return false;
+        if (Date.now() > info.expiresAt) {
+            localStorage.removeItem('ncb_key_info');
+            return false;
+        }
+        return true;
+    }
+
+    function getRemainingTime() {
+        const info = getKeyInfo();
+        if (!info) return 0;
+        return Math.max(0, info.expiresAt - Date.now());
+    }
+
+    function formatTime(ms) {
+        const totalSec = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSec / 3600);
+        const minutes = Math.floor((totalSec % 3600) / 60);
+        const seconds = totalSec % 60;
+        return `${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    // ================= UI ELEMENTS =================
+    const keyScreen = document.getElementById('keyScreen');
+    const toolScreen = document.getElementById('toolScreen');
+    const deviceIdDisplay = document.getElementById('deviceIdDisplay');
+    const keyInput = document.getElementById('keyInput');
+    const activateBtn = document.getElementById('activateBtn');
+    const keyMessage = document.getElementById('keyMessage');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const tiktokIdInput = document.getElementById('tiktokIdInput');
+    const fixBtn = document.getElementById('fixBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const statusText = document.getElementById('statusText');
+    const successIcon = document.getElementById('successIcon');
+    const logoutLink = document.getElementById('logoutLink');
+
+    // ================= INIT =================
+    function init() {
+        const deviceId = getDeviceId();
+        deviceIdDisplay.textContent = deviceId;
+
+        if (isKeyValid()) {
+            showToolScreen();
+        } else {
+            showKeyScreen();
+        }
+
+        setInterval(() => {
+            if (isKeyValid()) {
+                const remaining = getRemainingTime();
+                if (remaining > 0) {
+                    timerDisplay.textContent = `⏰ Key còn hiệu lực: ${formatTime(remaining)}`;
+                } else {
+                    localStorage.removeItem('ncb_key_info');
+                    showKeyScreen();
+                    keyMessage.textContent = 'Key đã hết hạn, vui lòng nhập key mới!';
+                    keyMessage.className = 'message error';
+                }
+            }
+        }, 1000);
+
+        if (isKeyValid()) {
+            timerDisplay.textContent = `⏰ Key còn hiệu lực: ${formatTime(getRemainingTime())}`;
+        }
+    }
+
+    function showKeyScreen() {
+        keyScreen.classList.remove('hidden');
+        toolScreen.classList.add('hidden');
+        keyInput.value = '';
+        keyMessage.textContent = '';
+        keyMessage.className = 'message';
+        timerDisplay.textContent = '';
+        resetToolScreen();
+    }
+
+    function showToolScreen() {
+        keyScreen.classList.add('hidden');
+        toolScreen.classList.remove('hidden');
+        if (isKeyValid()) {
+            timerDisplay.textContent = `⏰ Key còn hiệu lực: ${formatTime(getRemainingTime())}`;
+        }
+    }
+
+    function resetToolScreen() {
+        tiktokIdInput.value = '';
+        fixBtn.disabled = false;
+        progressContainer.classList.add('hidden');
+        progressBar.style.width = '0%';
+        progressText.textContent = '0%';
+        statusText.textContent = '';
+        statusText.className = 'status-text';
+        successIcon.classList.add('hidden');
+        if (fixInterval) {
+            clearInterval(fixInterval);
+            fixInterval = null;
+        }
+    }
+
+    // ================= KEY ACTIVATION HANDLER =================
+    activateBtn.addEventListener('click', () => {
+        const key = keyInput.value.trim();
+        if (!key) {
+            keyMessage.textContent = 'Vui lòng nhập key!';
+            keyMessage.className = 'message error';
+            return;
+        }
+
+        if (KEY_CONFIG.validKeys.includes(key)) {
+            saveKeyInfo(key);
+            keyMessage.textContent = '✅ Kích hoạt thành công! Đang chuyển hướng...';
+            keyMessage.className = 'message success';
+            timerDisplay.textContent = `⏰ Key còn hiệu lực: ${formatTime(KEY_CONFIG.validityDuration)}`;
+            
+            setTimeout(() => {
+                showToolScreen();
+            }, 800);
+        } else {
+            keyMessage.textContent = '❌ Key không hợp lệ! Vui lòng lấy key tại LAYMA.NET hoặc YEUMONEY.COM';
+            keyMessage.className = 'message error';
+            keyInput.value = '';
+        }
+    });
+
+    keyInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') activateBtn.click();
+    });
+
+    // ================= FIX TOOL HANDLER =================
+    let fixInterval = null;
+
+    fixBtn.addEventListener('click', () => {
+        if (!isKeyValid()) {
+            alert('Key đã hết hạn! Vui lòng nhập key mới.');
+            showKeyScreen();
+            return;
+        }
+
+        const tiktokId = tiktokIdInput.value.trim();
+        if (!tiktokId) {
+            statusText.textContent = '⚠️ Vui lòng nhập ID TikTok!';
+            statusText.className = 'status-text processing';
+            return;
+        }
+
+        startFix(tiktokId);
+    });
+
+    tiktokIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') fixBtn.click();
+    });
+
+    function startFix(tiktokId) {
+        if (fixInterval) clearInterval(fixInterval);
+        
+        fixBtn.disabled = true;
+        progressContainer.classList.remove('hidden');
+        successIcon.classList.add('hidden');
+        statusText.textContent = '🔄 Đang xử lý... Vui lòng chờ trong giây lát';
+        statusText.className = 'status-text processing';
+        progressBar.style.width = '0%';
+        progressText.textContent = '0%';
+
+        let elapsed = 0;
+        const totalDuration = KEY_CONFIG.fixDuration;
+
+        fixInterval = setInterval(() => {
+            elapsed++;
+            const percent = Math.min(100, (elapsed / totalDuration) * 100);
+            progressBar.style.width = percent + '%';
+            progressText.textContent = Math.floor(percent) + '%';
+
+            if (percent < 30) {
+                statusText.textContent = '🔄 Đang kết nối đến máy chủ TikTok...';
+            } else if (percent < 60) {
+                statusText.textContent = '⚙️ Đang phân tích dữ liệu rỗng...';
+            } else if (percent < 90) {
+                statusText.textContent = '🔧 Đang fix rỗng... Vui lòng không tắt trang';
+            } else {
+                statusText.textContent = '✨ Đang hoàn tất...';
+            }
+
+            if (elapsed >= totalDuration) {
+                clearInterval(fixInterval);
+                fixInterval = null;
+                completeFix();
+            }
+        }, 1000);
+    }
+
+    function completeFix() {
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+        statusText.textContent = '✅ FIX THÀNH CÔNG! Vào TikTok để nhặt quà thôi! 🎁';
+        statusText.className = 'status-text success';
+        successIcon.classList.remove('hidden');
+        fixBtn.disabled = false;
+        
+        const tiktokId = tiktokIdInput.value.trim();
+        const history = JSON.parse(localStorage.getItem('ncb_fix_history') || '[]');
+        history.push({
+            id: tiktokId,
+            time: new Date().toISOString(),
+            deviceId: getDeviceId()
+        });
+        if (history.length > 20) history.shift();
+        localStorage.setItem('ncb_fix_history', JSON.stringify(history));
+
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+            oscillator.frequency.setValueAtTime(1320, audioCtx.currentTime + 0.2);
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.5);
+        } catch (e) {}
+    }
+
+    // ================= LOGOUT =================
+    logoutLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm('Bạn có chắc muốn đăng xuất và đổi key?')) {
+            localStorage.removeItem('ncb_key_info');
+            showKeyScreen();
+            keyMessage.textContent = 'Đã đăng xuất. Vui lòng nhập key mới!';
+            keyMessage.className = 'message';
+        }
+    });
+
+    init();
 </script>
+
 </body>
 </html>
